@@ -35,10 +35,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert file to base64
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64Image = buffer.toString("base64");
+// Convert file to base64
+const bytes = await file.arrayBuffer();
+const buffer = Buffer.from(bytes);
+const base64Image = buffer.toString("base64");
+
+// Detect actual media type from file content or default to jpeg
+let mediaType: "image/jpeg" | "image/png" | "image/gif" | "image/webp" = "image/jpeg";
+if (file.type === "image/png") {
+  mediaType = "image/png";
+} else if (file.type === "image/gif") {
+  mediaType = "image/gif";
+} else if (file.type === "image/webp") {
+  mediaType = "image/webp";
+} else {
+  // Default to JPEG for all other types (including HEIC, HEIF, etc.)
+  mediaType = "image/jpeg";
+}
 
     // Prepare the analysis prompt
     const analysisPrompt = `Analyze this image and extract detailed information about the subject(s) and scene. Return ONLY valid JSON with this exact structure:
@@ -77,7 +90,7 @@ Be specific and accurate. Return only the JSON, no additional text.`;
               type: "image",
               source: {
                 type: "base64",
-                media_type: file.type as "image/jpeg" | "image/png" | "image/gif" | "image/webp",
+                media_type: mediaType,
                 data: base64Image,
               },
             },
