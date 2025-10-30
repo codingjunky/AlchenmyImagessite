@@ -6,14 +6,14 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-radial from-ink-2 via-ink to-ink opacity-50" />
       
       <div className="relative z-10 max-w-5xl mx-auto text-center space-y-1">
-        <div className="flex justify-center -mb-24 md:-mb-32">
+        <div className="flex justify-center mb-6 md:mb-8">
           <Image
             src="/Ampd_Image_logo.png"
             alt="AMP'd Images Logo"
             width={900}
             height={900}
             priority
-            className="w-[450px] h-[450px] md:w-[650px] md:h-[650px] lg:w-[850px] lg:h-[850px] object-contain drop-shadow-[0_0_30px_rgba(214,178,94,0.5)]"
+            className="w-[350px] h-[350px] md:w-[400px] md:h-[400px] lg:w-[450px] lg:h-[450px] object-contain drop-shadow-[0_0_30px_rgba(214,178,94,0.5)]"
           />
         </div>
 
