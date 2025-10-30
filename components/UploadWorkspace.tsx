@@ -66,21 +66,55 @@ export default function UploadWorkspace() {
     setPreviewUrl(url);
   };
 
-  const handleAnalyze = async () => {
-    if (!selectedFile) return;
-    setIsAnalyzing(true);
-    setError("");
+ const handleAnalyze = async () => {
+  if (!selectedFile) return;
+  setIsAnalyzing(true);
+  setError("");
 
-    try {
-      // Simulated analysis - would call /api/analyze in production
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert("Analysis complete! (This is a demo - API integration needed)");
-    } catch (err) {
-      setError("Analysis failed. Please try again.");
-    } finally {
-      setIsAnalyzing(false);
+  try {
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Analysis failed");
     }
-  };
+
+    const data = await response.json();
+    
+    // Update identity fields with detected values
+    if (data.profile?.subjects?.[0]) {
+      const subject = data.profile.subjects[0];
+      setIdentity({
+        ethnicity: { 
+          value: subject.ethnicity || "Other", 
+          source: "vision", 
+          user_override: false 
+        },
+        hair_color: { 
+          value: subject.hair_color || "brown", 
+          source: "vision", 
+          user_override: false 
+        },
+        eye_color: { 
+          value: subject.eye_color || "brown", 
+          source: "vision", 
+          user_override: false 
+        }
+      });
+    }
+
+    alert("Analysis complete! Identity traits detected.");
+  } catch (err) {
+    setError("Analysis failed. Please try again.");
+  } finally {
+    setIsAnalyzing(false);
+  }
+};
 
   const updateIdentity = (field: keyof typeof identity, value: string) => {
     setIdentity(prev => ({
