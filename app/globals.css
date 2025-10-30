@@ -55,3 +55,130 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.4s ease-out;
 }
+/* ===== AMP'd UI Kit Design Tokens ===== */
+/* Add these to your existing globals.css after the current :root variables */
+
+:root {
+  --ampd-bg: #0b0b0f;
+  --ampd-panel: #0f1117;
+  --ampd-text: #e7e7ea;
+  --ampd-muted: #9aa0a6;
+  --ampd-gold: #caa25e;    /* primary gold - matches your existing */
+  --ampd-gold-strong: #d9b56b;
+  --ampd-accent: #6bc2ff;  /* subtle electric accent */
+  --ampd-success: #3ddc97;
+  --ampd-danger: #ff5d60;
+  --ampd-radius: 16px;
+  --ampd-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* AMP'd Surface Components */
+.ampd-surface {
+  background: var(--ampd-panel);
+  border-radius: var(--ampd-radius);
+  box-shadow: var(--ampd-shadow);
+}
+
+.ampd-title {
+  color: var(--ampd-text);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.ampd-subtle {
+  color: var(--ampd-muted);
+}
+
+/* AMP'd Buttons */
+.ampd-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--ampd-text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ampd-btn:hover {
+  border-color: var(--ampd-gold);
+  color: var(--ampd-gold);
+}
+
+.ampd-btn-primary {
+  background: linear-gradient(90deg, var(--ampd-gold), var(--ampd-gold-strong));
+  color: #101010;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ampd-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(202,162,94,0.4);
+}
+
+/* Layout helpers */
+.ampd-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.ampd-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Animations */
+@keyframes ampd-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ampd-spin {
+  animation: ampd-rotate 1.2s linear infinite;
+}
+
+/* AMP'd Meter custom styling */
+#ampd-meter {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+}
+
+#ampd-meter::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ampd-gold);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(202,162,94,0.6);
+}
+
+#ampd-meter::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ampd-gold);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(202,162,94,0.6);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ampd-row {
+    flex-direction: column;
+  }
+  
+  .ampd-surface {
+    border-radius: 12px;
+  }
+}
