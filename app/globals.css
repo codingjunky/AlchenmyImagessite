@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #0B0B0C;
+  --color-ink-2: #121214;
+  --color-paper: #F5F3EF;
+  --color-gold: #D6B25E;
+  --color-gold-2: #F0D58B;
+  --color-muted: #9CA3AF;
+  --color-ring: #D6B25E;
+}
+
+:root {
+  --ink: #0B0B0C;
+  --ink-2: #121214;
+  --paper: #F5F3EF;
+  --gold: #D6B25E;
+  --gold-2: #F0D58B;
+  --muted: #9CA3AF;
+  --ring: #D6B25E;
+}
+
+html {
+  color: var(--paper);
+  background: var(--ink);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
