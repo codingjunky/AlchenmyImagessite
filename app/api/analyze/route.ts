@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+// Force rebuild: 2025-10-30 16:21:25
 import Anthropic from "@anthropic-ai/sdk";
 
 const anthropic = new Anthropic({
@@ -80,6 +80,7 @@ Be specific and accurate. Return only the JSON, no additional text.`;
               type: "image",
               source: {
                 type: "base64",
+console.log('HARDCODED MEDIA TYPE:', 'image/jpeg');
                 media_type: "image/jpeg",
                 data: base64Image,
               },
