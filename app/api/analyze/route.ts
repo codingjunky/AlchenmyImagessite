@@ -80,7 +80,7 @@ Be specific and accurate. Return only the JSON, no additional text.`;
               type: "image",
               source: {
                 type: "base64",
-                media_type: mediaType,
+                media_type: "image/jpeg",
                 data: base64Image,
               },
             },
