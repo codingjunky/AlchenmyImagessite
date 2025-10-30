@@ -26,10 +26,12 @@ export default function Hero() {
         </p>
 
         <div className="pt-2">
-          <button className="group relative px-12 py-5 text-lg font-semibold text-ink bg-gold rounded-full transition-all duration-300 ease-out hover:bg-gold-2 hover:scale-105 hover:shadow-[0_0_30px_rgba(214,178,94,0.5)] focus:outline-none focus:ring-4 focus:ring-gold/50">
-            Enter the Beta Experience
-          </button>
-        </div>
+  <a href="#upload">
+    <button className="group relative px-12 py-5 text-lg font-semibold text-ink bg-gold rounded-full transition-all duration-300 ease-out hover:bg-gold-2 hover:scale-105 hover:shadow-[0_0_30px_rgba(214,178,94,0.5)] focus:outline-none focus:ring-4 focus:ring-gold/50">
+      Enter the Beta Experience
+    </button>
+  </a>
+</div>
 
         <p className="text-sm md:text-base text-muted pt-1">
           Limited-time free beta. Powered by Claude + AMP Studios.
