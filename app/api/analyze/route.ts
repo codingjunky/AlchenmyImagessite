@@ -1,4 +1,5 @@
 // Force rebuild: 2025-10-30 16:21:25
+import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
 const anthropic = new Anthropic({
