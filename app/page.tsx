@@ -1,3 +1,4 @@
+import { AmpdUIKit } from '@/components/AmpdUIKit';
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import FeatureGrid from "@/components/FeatureGrid";
