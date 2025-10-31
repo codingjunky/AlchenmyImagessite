@@ -1,0 +1,2922 @@
+<!DOCTYPE html>
+<!-- AMP'D UP IMAGES - PRE-BETA VERSION - Updated: Oct 24, 2025 - v2.3.1-CACHE-BUST -->
+<!-- Smart AI Analysis | Loading Indicators | Premium Features Locked -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CACHE BUSTING - Forces browser to reload --><link rel="icon" type="image/png" href="favicon.png?v=231024">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="version" content="BETA-2.3.1-20251024-2115-FORCE-REFRESH">
+    <title>AMP'D UP IMAGES™ - Prompt Builder BETA v2.3.1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes particle-float {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* New loading animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse-scale {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes dot-pulse {
+            0%, 80%, 100% { opacity: 0.3; }
+            40% { opacity: 1; }
+        }
+        
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            color: #cfcfcf;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Atmospheric background effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Animated light streak */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+            animation: pulse-glow 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Loading Overlay Styles */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(10px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            border-radius: 12px;
+            animation: fade-in 0.3s ease-out;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 24px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+        
+        .loading-content {
+            text-align: center;
+            max-width: 400px;
+            padding: 0 20px;
+        }
+        
+        .loading-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #d4af37;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .loading-message {
+            font-size: 16px;
+            color: #a0a0a0;
+            margin-bottom: 8px;
+            animation: pulse-scale 2s ease-in-out infinite;
+        }
+        
+        .loading-submessage {
+            font-size: 14px;
+            color: #707070;
+            font-style: italic;
+        }
+        
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+            margin-left: 4px;
+        }
+        
+        .loading-dots span {
+            width: 6px;
+            height: 6px;
+            background: #d4af37;
+            border-radius: 50%;
+            animation: dot-pulse 1.4s ease-in-out infinite;
+        }
+        
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .loading-progress {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #fbbf24);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease-out;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+        }
+        
+        .loading-tip {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #b8b8b8;
+        }
+        
+        .loading-tip strong {
+            color: #d4af37;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, rgba(26, 26, 26, 0.85) 0%, rgba(15, 15, 15, 0.92) 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            overflow: hidden;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.7),
+                0 0 120px rgba(212, 175, 55, 0.15),
+                inset 0 1px 0 rgba(212, 175, 55, 0.2),
+                inset 0 -1px 0 rgba(59, 130, 246, 0.1);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(25px);
+        }
+        
+        /* Top border glow */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37 20%, #fbbf24 50%, #3b82f6 80%, transparent);
+            animation: shimmer 3s linear infinite;
+            background-size: 2000px 100%;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(15, 15, 15, 0.98) 100%);
+            padding: 28px 35px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            position: relative;
+        }
+        
+        /* Header bottom accent line */
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.7), rgba(251, 191, 36, 0.5), transparent);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            box-shadow: 
+                0 0 40px rgba(212, 175, 55, 0.6),
+                0 0 20px rgba(59, 130, 246, 0.3),
+                inset 0 3px 15px rgba(0, 0, 0, 0.5),
+                0 6px 20px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            position: relative;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background-image: url('logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 14px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(59, 130, 246, 0.3));
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.6;
+        }
+        
+        .brand {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .brand-name {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d4af37 0%, #fbbf24 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+        }
+        
+        .brand-tagline {
+            font-size: 12px;
+            color: #808080;
+            letter-spacing: 2px;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+        
+        .version-badge {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(59, 130, 246, 0.15) 100%);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            font-size: 13px;
+            font-weight: 600;
+            color: #d4af37;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .version-badge::before {
+            content: '⚡';
+            font-size: 16px;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            background: linear-gradient(180deg, rgba(26, 26, 26, 0.6) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+        
+        .tabs::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px 30px;
+            background: transparent;
+            border: none;
+            color: #808080;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+        
+        .tab::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #d4af37, #fbbf24);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+        
+        .tab::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(59, 130, 246, 0.03));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .tab:hover {
+            color: #d4af37;
+        }
+        
+        .tab:hover::after {
+            opacity: 1;
+        }
+        
+        .tab.active {
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        }
+        
+        .tab.active::before {
+            transform: scaleX(1);
+        }
+        
+        .tab.active::after {
+            opacity: 1;
+        }
+        
+        .premium-badge {
+            background: linear-gradient(135deg, #d4af37, #fbbf24);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #000;
+            text-transform: uppercase;
+            box-shadow: 
+                0 0 15px rgba(212, 175, 55, 0.6),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        /* Premium lock styles */
+        .tab.premium-tab.locked {
+            position: relative;
+            cursor: not-allowed;
+        }
+        
+        .tab.premium-tab.locked::before {
+            display: none;
+        }
+        
+        .premium-lock-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 8px;
+        }
+        
+        .premium-lock-overlay:hover {
+            background: rgba(212, 175, 55, 0.15);
+        }
+        
+        .premium-lock-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .premium-lock-icon {
+            font-size: 20px;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+        }
+        
+        .premium-lock-text {
+            font-size: 11px;
+            color: #d4af37;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Premium tab content lock */
+        #reverseEngineerContent.locked {
+            position: relative;
+            min-height: 400px;
+        }
+        
+        .premium-tab-lock {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(15, 15, 15, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 60px 40px;
+        }
+        
+        .premium-tab-lock:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+        
+        .premium-tab-lock-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .premium-tab-lock-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d4af37 0%, #fbbf24 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        
+        .premium-tab-lock-description {
+            max-width: 500px;
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .premium-tab-lock-button {
+            background: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+            color: #000;
+            padding: 14px 40px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.6),
+                0 6px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .premium-tab-lock-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 40px rgba(212, 175, 55, 0.8),
+                0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .content {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .left {
+            flex: 0 0 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.7) 0%, rgba(15, 15, 15, 0.8) 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(59, 130, 246, 0.2));
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 18px;
+            color: #d4af37;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-zone {
+            border: 2px dashed rgba(212, 175, 55, 0.4);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(26, 26, 26, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(59, 130, 246, 0.03));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .upload-zone:hover {
+            border-color: rgba(212, 175, 55, 0.7);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        
+        .upload-zone:hover::before {
+            opacity: 1;
+        }
+        
+        .upload-zone.drag-over {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.15);
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+        }
+        
+        #imagePreview {
+            display: none;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        #imagePreview.active {
+            display: block;
+        }
+        
+        #imagePreview img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+        
+        .info-box {
+            margin-top: 16px;
+            padding: 14px;
+            background: rgba(212, 175, 55, 0.08);
+            border-left: 3px solid rgba(212, 175, 55, 0.6);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #a0a0a0;
+            line-height: 1.5;
+        }
+        
+        .info-box strong {
+            color: #d4af37;
+        }
+        
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .preset-btn {
+            padding: 12px 16px;
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            color: #a0a0a0;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .preset-btn:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
+            color: #d4af37;
+        }
+        
+        .preset-btn.active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(251, 191, 36, 0.15));
+            border-color: #d4af37;
+            color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row-full {
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #a0a0a0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #cfcfcf;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            background: rgba(26, 26, 26, 0.8);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .slider-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #a0a0a0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .slider-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, 
+                rgba(212, 175, 55, 0.2) 0%, 
+                rgba(212, 175, 55, 0.5) 50%, 
+                #d4af37 100%);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .slider:hover {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4af37, #fbbf24);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+            transition: all 0.3s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4af37, #fbbf24);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+            transition: all 0.3s ease;
+        }
+        
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+        
+        .effects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+        
+        .effect-btn {
+            padding: 10px 12px;
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: #a0a0a0;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .effect-btn:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
+            color: #d4af37;
+        }
+        
+        .effect-btn.active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(251, 191, 36, 0.15));
+            border-color: #d4af37;
+            color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.6);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .output-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.7) 0%, rgba(15, 15, 15, 0.8) 100%);
+            border-radius: 16px;
+            padding: 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(26, 26, 26, 0.4);
+        }
+        
+        .output-header h4 {
+            font-size: 16px;
+            color: #d4af37;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .copy-btn {
+            padding: 8px 18px;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 8px;
+            color: #d4af37;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(212, 175, 55, 0.25);
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .copy-btn.copied {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+        
+        .output-content {
+            padding: 20px 24px;
+            color: #cfcfcf;
+            line-height: 1.7;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Inter', monospace;
+        }
+        
+        .output-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .output-content::-webkit-scrollbar-track {
+            background: rgba(26, 26, 26, 0.4);
+            border-radius: 4px;
+        }
+        
+        .output-content::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.4);
+            border-radius: 4px;
+        }
+        
+        .output-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.6);
+        }
+        
+        /* Toast notification styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+        }
+        
+        .toast {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.98) 0%, rgba(15, 15, 15, 0.98) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .toast.success .toast-title {
+            color: #22c55e;
+        }
+        
+        .toast.error .toast-title {
+            color: #ef4444;
+        }
+        
+        .toast.info .toast-title {
+            color: #3b82f6;
+        }
+        
+        .toast-message {
+            font-size: 13px;
+            color: #a0a0a0;
+            line-height: 1.5;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .left {
+                flex: 1;
+                width: 100%;
+            }
+            
+            .right {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 16px;
+            }
+            
+            .header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .brand-name {
+                font-size: 22px;
+            }
+            
+            .content {
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .preset-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .effects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .tab {
+                flex: 0 0 auto;
+                min-width: 150px;
+            }
+            
+            .toast-container {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+        }
+        
+        /* History section styles */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            padding: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .history-item:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        
+        .history-item-text {
+            font-size: 13px;
+            color: #cfcfcf;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        
+        .history-item-time {
+            font-size: 11px;
+            color: #707070;
+        }
+        
+        .empty-history {
+            text-align: center;
+            padding: 40px 20px;
+            color: #707070;
+            font-size: 14px;
+        }
+        
+        /* Reverse Engineer Tab Styles */
+        .outcome-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .outcome-btn {
+            padding: 14px;
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            color: #a0a0a0;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .outcome-btn:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
+            color: #d4af37;
+        }
+        
+        .outcome-btn.active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(251, 191, 36, 0.15));
+            border-color: #d4af37;
+            color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .mood-btn {
+            padding: 12px;
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: #a0a0a0;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .mood-btn:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
+            color: #d4af37;
+        }
+        
+        .mood-btn.active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(251, 191, 36, 0.15));
+            border-color: #d4af37;
+            color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .platform-btn {
+            padding: 14px;
+            background: rgba(26, 26, 26, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            color: #a0a0a0;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .platform-btn:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
+            color: #d4af37;
+        }
+        
+        .platform-btn.active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(251, 191, 36, 0.15));
+            border-color: #d4af37;
+            color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        
+        .configure-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #d4af37 0%, #fbbf24 100%);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        
+        .configure-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.6);
+        }
+        
+        .configure-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo"></div>
+                <div class="brand">
+                    <div class="brand-name">AMP'D UP IMAGES™</div>
+                    <div class="brand-tagline">AI PROMPT BUILDER</div>
+                </div>
+            </div>
+            <div class="version-badge">BETA v2.3.1 - Cache Refresh</div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(0)">⚡ Quick Builder</button>
+            <button class="tab premium-tab" onclick="handlePremiumTab(1)">
+                🔮 Reverse Engineer
+                <span class="premium-badge">Pro</span>
+            </button>
+            <button class="tab" onclick="switchTab(2)">📜 History</button>
+        </div>
+        
+        <div id="quickBuilderTab" class="tab-content active">
+        <div class="content">
+            <div class="left">
+                <div class="card" style="position: relative;">
+                    <h3>📸 Image Upload</h3>
+                    
+                    <!-- Loading Overlay -->
+                    <div class="loading-overlay" id="analysisLoadingOverlay">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-content">
+                            <div class="loading-title">
+                                🤖 AI Analysis in Progress
+                                <div class="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div class="loading-message" id="loadingMessage">
+                                Uploading your image...
+                            </div>
+                            <div class="loading-submessage">Please wait, this may take 5-30 seconds</div>
+                            <div class="loading-progress">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="progressBar"></div>
+                                </div>
+                            </div>
+                            <div class="loading-tip">
+                                <strong>💡 Tip:</strong> Claude is analyzing colors, lighting, composition, and visual elements to automatically configure your prompt settings.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="dropZone" class="upload-zone">
+                        <div class="upload-icon">📤</div>
+                        <p><strong>Drop image here</strong> or click to browse</p>
+                        <p>Upload your image to analyze</p>
+                    </div>
+                    <div id="imagePreview">
+                        <img id="previewImg" src="" alt="Preview">
+                        <div class="btn-grid">
+                            <button class="btn btn-primary" onclick="analyzeImage()">🔍 Analyze</button>
+                            <button class="btn btn-secondary" onclick="resetImage()">↻ Reset</button>
+                        </div>
+                    </div>
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    
+                    <div class="info-box">
+                        <strong>💡 Tip:</strong> Upload an image to extract visual elements like lighting, colors, and composition for your prompts.
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>🎨 Style Presets</h3>
+                    <div class="preset-grid">
+                        <button class="preset-btn" onclick="togglePreset('photo', this)">📷 Photographic</button>
+                        <button class="preset-btn" onclick="togglePreset('cinematic', this)">🎬 Cinematic</button>
+                        <button class="preset-btn" onclick="togglePreset('anime', this)">🎌 Anime</button>
+                        <button class="preset-btn" onclick="togglePreset('digital', this)">🖥️ Digital Art</button>
+                        <button class="preset-btn" onclick="togglePreset('painting', this)">🎨 Oil Painting</button>
+                        <button class="preset-btn" onclick="togglePreset('watercolor', this)">🖌️ Watercolor</button>
+                        <button class="preset-btn" onclick="togglePreset('sketch', this)">✏️ Sketch</button>
+                        <button class="preset-btn" onclick="togglePreset('pixel', this)">🎮 Pixel Art</button>
+                        <button class="preset-btn" onclick="togglePreset('comic', this)">💥 Comic Book</button>
+                        <button class="preset-btn" onclick="togglePreset('abstract', this)">🌀 Abstract</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>✨ AMP'D Effects</h3>
+                    <div class="effects-grid">
+                        <button class="effect-btn" onclick="toggleFlare('lens', this)">🌟 Lens Flare</button>
+                        <button class="effect-btn" onclick="toggleFlare('god', this)">☀️ God Rays</button>
+                        <button class="effect-btn" onclick="toggleFlare('bloom', this)">💫 Bloom</button>
+                        <button class="effect-btn" onclick="toggleFlare('glow', this)">✨ Glow</button>
+                        <button class="effect-btn" onclick="toggleFlare('sparkle', this)">⭐ Sparkles</button>
+                        <button class="effect-btn" onclick="toggleFlare('aura', this)">🔮 Aura</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>🔬 Nano Scale</h3>
+                    <div class="effects-grid">
+                        <button class="effect-btn" onclick="toggleNano('micro', this)">🦠 Microscopic</button>
+                        <button class="effect-btn" onclick="toggleNano('macro', this)">🔍 Macro</button>
+                        <button class="effect-btn" onclick="toggleNano('crystal', this)">💎 Crystalline</button>
+                        <button class="effect-btn" onclick="toggleNano('quantum', this)">⚛️ Quantum</button>
+                        <button class="effect-btn" onclick="toggleNano('cellular', this)">🧬 Cellular</button>
+                        <button class="effect-btn" onclick="toggleNano('atomic', this)">💥 Atomic</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right">
+                <div class="card">
+                    <h3>🎯 Core Prompt Settings</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>👤 Subject</label>
+                            <input type="text" id="subject" placeholder="e.g., a warrior princess">
+                        </div>
+                        <div class="form-group">
+                            <label>🌍 Setting</label>
+                            <input type="text" id="setting" placeholder="e.g., ancient temple">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>🌟 Elements</label>
+                            <input type="text" id="elements" placeholder="e.g., glowing orb">
+                        </div>
+                        <div class="form-group">
+                            <label>💡 Lighting</label>
+                            <select id="lighting">
+                                <option value="">Select lighting</option>
+                                <option value="natural light">Natural Light</option>
+                                <option value="studio lighting">Studio Lighting</option>
+                                <option value="dramatic lighting">Dramatic Lighting</option>
+                                <option value="soft lighting">Soft Lighting</option>
+                                <option value="cinematic lighting">Cinematic Lighting</option>
+                                <option value="golden hour">Golden Hour</option>
+                                <option value="rim lighting">Rim Lighting</option>
+                                <option value="backlighting">Backlighting</option>
+                                <option value="neon lighting">Neon Lighting</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>🎨 Colors</label>
+                            <select id="colors">
+                                <option value="">Select color scheme</option>
+                                <option value="vibrant">Vibrant</option>
+                                <option value="muted">Muted</option>
+                                <option value="warm tones">Warm Tones</option>
+                                <option value="cool tones">Cool Tones</option>
+                                <option value="pastel">Pastel</option>
+                                <option value="monochrome">Monochrome</option>
+                                <option value="neon">Neon</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>✨ Style</label>
+                            <select id="style">
+                                <option value="">Select style</option>
+                                <option value="hyper-realistic">Hyper-Realistic</option>
+                                <option value="surreal">Surreal</option>
+                                <option value="minimalist">Minimalist</option>
+                                <option value="maximalist">Maximalist</option>
+                                <option value="ethereal">Ethereal</option>
+                                <option value="gritty">Gritty</option>
+                                <option value="dreamlike">Dreamlike</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>📐 Aspect Ratio</label>
+                            <select id="ratio">
+                                <option value="1:1">1:1 Square</option>
+                                <option value="16:9">16:9 Landscape</option>
+                                <option value="9:16">9:16 Portrait</option>
+                                <option value="4:3">4:3 Classic</option>
+                                <option value="21:9">21:9 Ultrawide</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📷 Camera Angle</label>
+                            <select id="cameraAngle">
+                                <option value="">Select angle</option>
+                                <option value="eye level">Eye Level</option>
+                                <option value="low angle">Low Angle</option>
+                                <option value="high angle">High Angle</option>
+                                <option value="bird's eye view">Bird's Eye View</option>
+                                <option value="worm's eye view">Worm's Eye View</option>
+                                <option value="dutch angle">Dutch Angle</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>🎥 Camera Type</label>
+                            <select id="cameraType">
+                                <option value="">Select camera</option>
+                                <option value="DSLR">DSLR</option>
+                                <option value="35mm film">35mm Film</option>
+                                <option value="medium format">Medium Format</option>
+                                <option value="wide-angle lens">Wide-Angle Lens</option>
+                                <option value="telephoto lens">Telephoto Lens</option>
+                                <option value="macro lens">Macro Lens</option>
+                                <option value="fisheye lens">Fisheye Lens</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>🔬 Nano Scale</label>
+                            <select id="nanoScale">
+                                <option value="">Select scale</option>
+                                <option value="microscopic detail">Microscopic Detail</option>
+                                <option value="macro photography">Macro Photography</option>
+                                <option value="crystalline structure">Crystalline Structure</option>
+                                <option value="quantum level">Quantum Level</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group" id="skinToneGroup">
+                            <label>👤 Skin Tone (Premium)</label>
+                            <select id="skinTone">
+                                <option value="">Select skin tone</option>
+                                <option value="fair porcelain">Fair Porcelain</option>
+                                <option value="fair ivory">Fair Ivory</option>
+                                <option value="fair beige">Fair Beige</option>
+                                <option value="light cream">Light Cream</option>
+                                <option value="light honey">Light Honey</option>
+                                <option value="light golden">Light Golden</option>
+                                <option value="medium sand">Medium Sand</option>
+                                <option value="medium tan">Medium Tan</option>
+                                <option value="medium olive">Medium Olive</option>
+                                <option value="medium bronze">Medium Bronze</option>
+                                <option value="medium deep">Medium Deep</option>
+                                <option value="tan caramel">Tan Caramel</option>
+                                <option value="tan copper">Tan Copper</option>
+                                <option value="tan amber">Tan Amber</option>
+                                <option value="deep almond">Deep Almond</option>
+                                <option value="deep mahogany">Deep Mahogany</option>
+                                <option value="deep chestnut">Deep Chestnut</option>
+                                <option value="deep espresso">Deep Espresso</option>
+                                <option value="rich ebony">Rich Ebony</option>
+                                <option value="rich sable">Rich Sable</option>
+                                <option value="rich umber">Rich Umber</option>
+                                <option value="very deep midnight">Very Deep Midnight</option>
+                                <option value="very deep onyx">Very Deep Onyx</option>
+                                <option value="warm undertone">Warm Undertone</option>
+                                <option value="cool undertone">Cool Undertone</option>
+                                <option value="neutral undertone">Neutral Undertone</option>
+                                <option value="olive undertone">Olive Undertone</option>
+                                <option value="golden undertone">Golden Undertone</option>
+                                <option value="peachy undertone">Peachy Undertone</option>
+                                <option value="rosy undertone">Rosy Undertone</option>
+                            </select>
+                        </div>
+                        <!-- Identity controls removed -->
+                    
+                    <div class="form-row">
+                        
+                    <!-- VIDEO PROMPT SECTION - AMP'd Feature -->
+                    </div>
+                    </div>
+                    <div class="card" id="promptTypeSection">
+                        <h3>🎬 Prompt Type</h3>
+                        <div class="prompt-type-selector" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                            <button type="button" class="prompt-type-btn active" data-type="image" onclick="setPromptType('image')" style="padding: 14px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(251, 191, 36, 0.15)); border: 1px solid #d4af37; border-radius: 10px; color: #d4af37; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 600;">
+                                <span style="font-size: 24px;">🖼️</span>
+                                <span>Image Prompt</span>
+                            </button>
+                            <button type="button" class="prompt-type-btn" data-type="video" onclick="setPromptType('video')" style="padding: 14px; background: rgba(26, 26, 26, 0.6); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 10px; color: #a0a0a0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; font-weight: 600;">
+                                <span style="font-size: 24px;">🎬</span>
+                                <span>Video Prompt</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Video-specific controls (hidden by default) -->
+                    <div class="card video-controls" id="videoControls" style="display: none;">
+                        <h3>🎥 Video Settings (Powered by AMP'd AI)</h3>
+                        
+                        <div class="form-group">
+                            <label>📝 Motion Description</label>
+                            <textarea 
+                                id="motionDescription" 
+                                placeholder="Describe the movement: Camera slowly pushes in while subject turns..."
+                                rows="3"
+                                style="width: 100%; padding: 10px; background: rgba(26, 26, 26, 0.6); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; color: #cfcfcf; resize: vertical;"
+                            ></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>🎥 Camera Movement</label>
+                                <select id="cameraMovement">
+                                    <option value="">Select movement</option>
+                                    <option value="static">Static/Fixed</option>
+                                    <option value="pan">Pan (horizontal)</option>
+                                    <option value="tilt">Tilt (vertical)</option>
+                                    <option value="zoom">Zoom In/Out</option>
+                                    <option value="dolly">Dolly (forward/back)</option>
+                                    <option value="tracking">Tracking Shot</option>
+                                    <option value="crane">Crane/Jib</option>
+                                    <option value="handheld">Handheld</option>
+                                    <option value="orbit">Orbit/360°</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>⏱️ Duration</label>
+                                <select id="videoDuration">
+                                    <option value="3">3 seconds</option>
+                                    <option value="5" selected>5 seconds</option>
+                                    <option value="10">10 seconds</option>
+                                    <option value="15">15 seconds</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>🎭 Pace/Rhythm</label>
+                                <select id="videoPace">
+                                    <option value="slow">Slow & Cinematic</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="fast">Fast & Dynamic</option>
+                                    <option value="variable">Variable/Mixed</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>🌟 Mood</label>
+                                <select id="videoMood">
+                                    <option value="">Select mood</option>
+                                    <option value="dramatic">Dramatic</option>
+                                    <option value="dreamy">Dreamy</option>
+                                    <option value="energetic">Energetic</option>
+                                    <option value="mysterious">Mysterious</option>
+                                    <option value="romantic">Romantic</option>
+                                    <option value="tense">Tense</option>
+                                    <option value="uplifting">Uplifting</option>
+                                    <option value="melancholic">Melancholic</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box" style="background: rgba(212, 175, 55, 0.1); border-left: 3px solid #d4af37; padding: 12px; margin-top: 15px;">
+                            <strong>🎬 AMP'd Video Intelligence:</strong> We'll generate a professional video prompt optimized for tools like Runway, Pika, or Sora. The AMP'd Meter controls the visual intensity for both image and video outputs.
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label class="slider-label">⚡ Style Intensity</label>
+                            <span class="slider-value" id="intensityValue">75%</span>
+                        </div>
+                        <input type="range" id="intensity" class="slider" min="0" max="100" value="75" oninput="updateIntensity(this.value)">
+                        <p style="font-size: 12px; color: #808080; margin-top: 8px;">Controls the strength of style keywords in your prompts</p>
+                    </div>
+                </div>
+                
+                <button class="generate-btn" onclick="generate()">⚡ Generate Prompts</button>
+                
+                <div class="output-card">
+                    <div class="output-header">
+                        <h4>🎯 Master Prompt</h4>
+                        <button class="copy-btn" onclick="copy('master', this)">Copy</button>
+                    </div>
+                    <div class="output-content" id="master">Your generated prompt will appear here...</div>
+                </div>
+                
+                <div class="output-card">
+                    <div class="output-header">
+                        <h4>🚫 Negative Prompt</h4>
+                        <button class="copy-btn" onclick="copy('negative', this)">Copy</button>
+                    </div>
+                    <div class="output-content" id="negative">Negative prompts will appear here...</div>
+                </div>
+                
+                <div class="output-card">
+                    <div class="output-header">
+                        <h4>🎨 Midjourney Format</h4>
+                        <button class="copy-btn" onclick="copy('mj', this)">Copy</button>
+                    </div>
+                    <div class="output-content" id="mj">Midjourney prompt with parameters will appear here...</div>
+                </div>
+                
+                <div class="output-card">
+                    <div class="output-header">
+                        <h4>🌊 Runway ML Format</h4>
+                        <button class="copy-btn" onclick="copy('rw', this)">Copy</button>
+                    </div>
+                    <div class="output-content" id="rw">Runway ML prompt will appear here...</div>
+                </div>
+                
+                <div class="output-card">
+                    <div class="output-header">
+                        <h4>🎭 SDXL Format</h4>
+                        <button class="copy-btn" onclick="copy('sdxl', this)">Copy</button>
+                    </div>
+                    <div class="output-content" id="sdxl">SDXL prompt will appear here...</div>
+                </div>
+                
+                <div class="output-card">
+                    <div class="output-header">
+                        <h4>⚡ FLUX Format</h4>
+                        <button class="copy-btn" onclick="copy('flux', this)">Copy</button>
+                    </div>
+                    <div class="output-content" id="flux">FLUX prompt will appear here...</div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        <div id="reverseEngineerTab" class="tab-content">
+            <div class="content">
+                <div class="left">
+                    <div class="card">
+                        <h3>🎯 Desired Outcome</h3>
+                        <div class="outcome-grid">
+                            <button class="outcome-btn" onclick="toggleOutcome('portrait', this)">👤 Portrait</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('landscape', this)">🏞️ Landscape</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('product', this)">📦 Product</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('fashion', this)">👗 Fashion</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('architecture', this)">🏛️ Architecture</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('fantasy', this)">🐉 Fantasy</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('scifi', this)">🚀 Sci-Fi</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('abstract', this)">🌀 Abstract</button>
+                            <button class="outcome-btn" onclick="toggleOutcome('character', this)">🦸 Character</button>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Describe Your Vision</label>
+                            <textarea id="visionDescription" placeholder="e.g., A dramatic portrait of a cyberpunk warrior in a neon-lit city..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🎭 Mood & Atmosphere</h3>
+                        <div class="mood-grid">
+                            <button class="mood-btn" onclick="toggleMood('epic', this)">⚔️ Epic</button>
+                            <button class="mood-btn" onclick="toggleMood('serene', this)">🧘 Serene</button>
+                            <button class="mood-btn" onclick="toggleMood('dark', this)">🌑 Dark</button>
+                            <button class="mood-btn" onclick="toggleMood('whimsical', this)">🎪 Whimsical</button>
+                            <button class="mood-btn" onclick="toggleMood('mysterious', this)">🔮 Mysterious</button>
+                            <button class="mood-btn" onclick="toggleMood('dramatic', this)">🎭 Dramatic</button>
+                            <button class="mood-btn" onclick="toggleMood('peaceful', this)">☮️ Peaceful</button>
+                            <button class="mood-btn" onclick="toggleMood('intense', this)">💥 Intense</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="right">
+                    <div class="card">
+                        <h3>🎨 Target Platform</h3>
+                        <div class="platform-grid">
+                            <button class="platform-btn active" onclick="togglePlatform('midjourney', this)">
+                                🎨 Midjourney
+                            </button>
+                            <button class="platform-btn" onclick="togglePlatform('runway', this)">
+                                🌊 Runway ML
+                            </button>
+                            <button class="platform-btn" onclick="togglePlatform('sdxl', this)">
+                                🎭 Stable Diffusion XL
+                            </button>
+                            <button class="platform-btn" onclick="togglePlatform('flux', this)">
+                                ⚡ FLUX
+                            </button>
+                        </div>
+                        
+                        <button class="configure-btn" onclick="reverseEngineer()">🔮 Auto-Configure Settings</button>
+                        
+                        <div class="info-box" style="margin-top: 20px;">
+                            <strong>✨ How it works:</strong> Describe your desired outcome and mood, then let Claude automatically configure all the settings in the Quick Builder tab to match your vision perfectly.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="historyTab" class="tab-content">
+            <div class="content">
+                <div class="card" style="flex: 1;">
+                    <h3>📜 Prompt History</h3>
+                    <div class="history-list" id="historyList">
+                        <div class="empty-history">
+                            No prompts generated yet. Start creating to see your history here!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // GLOBAL STATE
+        // ========================================
+        
+        let activePresets = [];
+        let activeFlares = [];
+        let activeNano = [];
+        let currentImage = null;
+        let promptHistory = [];
+        
+        // Reverse Engineer state
+        let selectedOutcome = '';
+        let selectedMoods = [];
+        let selectedPlatform = 'midjourney';
+        
+        // ========================================
+        // STYLE PRESETS
+        // ========================================
+        
+        const stylePresets = {
+            photo: {
+                name: 'Photographic',
+                keywords: ['photorealistic', 'sharp focus', '8k uhd', 'dslr quality', 'bokeh']
+            },
+            cinematic: {
+                name: 'Cinematic',
+                keywords: ['cinematic composition', 'film grain', 'anamorphic', 'color grading', 'depth of field']
+            },
+            anime: {
+                name: 'Anime',
+                keywords: ['anime style', 'cel shaded', 'vibrant colors', 'clean lineart', 'dramatic shadows']
+            },
+            digital: {
+                name: 'Digital Art',
+                keywords: ['digital painting', 'concept art', 'artstation trending', 'matte painting', 'detailed']
+            },
+            painting: {
+                name: 'Oil Painting',
+                keywords: ['oil painting', 'brushstrokes', 'canvas texture', 'impasto', 'fine art']
+            },
+            watercolor: {
+                name: 'Watercolor',
+                keywords: ['watercolor', 'soft edges', 'flowing colors', 'paper texture', 'translucent']
+            },
+            sketch: {
+                name: 'Sketch',
+                keywords: ['pencil sketch', 'graphite', 'crosshatching', 'detailed linework', 'artistic sketch']
+            },
+            pixel: {
+                name: 'Pixel Art',
+                keywords: ['pixel art', '16-bit', 'retro gaming', 'dithered', 'low poly']
+            },
+            comic: {
+                name: 'Comic Book',
+                keywords: ['comic book style', 'bold outlines', 'halftone', 'speech bubbles', 'action lines']
+            },
+            abstract: {
+                name: 'Abstract',
+                keywords: ['abstract art', 'non-representational', 'geometric shapes', 'color theory', 'avant-garde']
+            }
+        };
+        
+        const flareEffects = {
+            lens: 'lens flare effect',
+            god: 'god rays',
+            bloom: 'bloom effect',
+            glow: 'ethereal glow',
+            sparkle: 'sparkles and glitter',
+            aura: 'mystical aura'
+        };
+        
+        const nanoEffects = {
+            micro: 'microscopic details',
+            macro: 'macro photography details',
+            crystal: 'crystalline structure',
+            quantum: 'quantum particle effects',
+            cellular: 'cellular structure',
+            atomic: 'atomic level detail'
+        };
+        
+        // ========================================
+        // LOADING INDICATOR FUNCTIONS
+        // ========================================
+        
+        function showLoadingOverlay() {
+            const overlay = document.getElementById('analysisLoadingOverlay');
+            const progressBar = document.getElementById('progressBar');
+            
+            overlay.classList.add('active');
+            progressBar.style.width = '0%';
+            
+            // Simulate progress updates
+            updateLoadingProgress(0);
+        }
+        
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('analysisLoadingOverlay');
+            overlay.classList.remove('active');
+        }
+        
+        function updateLoadingProgress(stage) {
+            const messageEl = document.getElementById('loadingMessage');
+            const progressBar = document.getElementById('progressBar');
+            
+            const stages = [
+                { progress: 20, message: 'Uploading your image...' },
+                { progress: 40, message: 'Connecting to Claude AI...' },
+                { progress: 60, message: 'Analyzing visual elements...' },
+                { progress: 80, message: 'Extracting colors and lighting...' },
+                { progress: 95, message: 'Applying insights to settings...' }
+            ];
+            
+            if (stage < stages.length) {
+                const currentStage = stages[stage];
+                messageEl.textContent = currentStage.message;
+                progressBar.style.width = currentStage.progress + '%';
+                
+                // Move to next stage after a delay
+                setTimeout(() => {
+                    updateLoadingProgress(stage + 1);
+                }, stage === 0 ? 500 : 3000); // First stage is faster
+            }
+        }
+        
+        function completeLoading() {
+            const progressBar = document.getElementById('progressBar');
+            const messageEl = document.getElementById('loadingMessage');
+            
+            progressBar.style.width = '100%';
+            messageEl.textContent = 'Analysis complete! ✨';
+            
+            setTimeout(() => {
+                hideLoadingOverlay();
+            }, 1000);
+        }
+        
+        // ========================================
+        // IMAGE UPLOAD & ANALYSIS
+        // ========================================
+        
+        const dropZone = document.getElementById('dropZone');
+        const imageUpload = document.getElementById('imageUpload');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+
+        dropZone.addEventListener('click', () => imageUpload.click());
+        
+        dropZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files.length) handleImage(e.dataTransfer.files[0]);
+        });
+        imageUpload.addEventListener('change', e => {
+            if (e.target.files.length) handleImage(e.target.files[0]);
+        });
+
+        function handleImage(file) {
+            if (!file.type.startsWith('image/')) {
+                showToast('Invalid File', 'Please upload an image file', 'error', 3000);
+                return;
+            }
+            
+            currentImage = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                previewImg.src = e.target.result;
+                dropZone.style.display = 'none';
+                imagePreview.classList.add('active');
+            };
+            reader.readAsDataURL(file);
+            
+            showToast('Image Loaded', 'Click "Analyze" to extract prompt elements', 'success', 3000);
+        }
+
+        function resetImage() {
+            currentImage = null;
+            previewImg.src = '';
+            dropZone.style.display = 'block';
+            imagePreview.classList.remove('active');
+            imageUpload.value = '';
+            showToast('Image Reset', 'Upload a new image to analyze', 'info', 2000);
+        }
+
+        async function analyzeImage() {
+            if (!currentImage) {
+                showToast('No Image', 'Please upload an image first', 'error', 3000);
+                return;
+            }
+            
+            // Show loading overlay
+            showLoadingOverlay();
+            
+            try {
+                // Convert image to base64
+                const reader = new FileReader();
+                
+                reader.onerror = () => {
+                    hideLoadingOverlay();
+                    showToast('Error', 'Failed to read image file', 'error', 3000);
+                };
+                
+                reader.onload = async () => {
+                    try {
+                        const base64Data = reader.result.split(',')[1];
+                        const mediaType = currentImage.type;
+                        
+                        // Call Netlify function
+                        const response = await fetch('/.netlify/functions/analyze-image', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                image: base64Data,
+                                mediaType: mediaType
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Analysis failed');
+                        }
+                        
+                        const result = await response.json();
+                        
+                        // Complete the loading animation
+                        completeLoading();
+                        
+                        // Apply the analysis after a brief delay
+                        setTimeout(() => {
+                            applyAnalysisToPrompt(result.analysis);
+                            showToast('Success!', 'Image analyzed and settings applied', 'success', 3000);
+                        }, 1000);
+                    } catch (error) {
+                        console.error('Error in analysis:', error);
+                        hideLoadingOverlay();
+                        showToast('Error', 'Failed to analyze image. Check console for details.', 'error', 4000);
+                    }
+                };
+                
+                reader.readAsDataURL(currentImage);
+            } catch (error) {
+                console.error('Error:', error);
+                hideLoadingOverlay();
+                showToast('Error', 'Failed to analyze image. Please try again.', 'error', 4000);
+            }
+        }
+        
+        function applyAnalysisToPrompt(analysis) {
+            // Display analysis result in a toast
+            showToast('Analysis Complete', '✨ Claude analyzed your image! The insights are being applied to your prompt...', 'success', 4000);
+            
+            // Parse Claude's analysis and extract key information
+            const lowerAnalysis = analysis.toLowerCase();
+            
+            // Extract and set subject if we can identify it
+            const subjectMatch = analysis.match(/(?:subject|main|depicts?|shows?|features?).*?[:—-]\s*([^.\n]+)/i);
+            if (subjectMatch && subjectMatch[1]) {
+                const subject = subjectMatch[1].trim().replace(/^(a|an|the)\s+/i, '');
+                document.getElementById('subject').value = subject.substring(0, 100);
+            }
+            
+            // Detect and set lighting
+            const lightingKeywords = {
+                'natural light': 'natural light',
+                'sunlight': 'natural light',
+                'golden hour': 'golden hour',
+                'studio': 'studio lighting',
+                'dramatic': 'dramatic lighting',
+                'soft': 'soft lighting',
+                'rim light': 'rim lighting',
+                'backlit': 'backlighting',
+                'neon': 'neon lighting',
+                'cinematic': 'cinematic lighting'
+            };
+            
+            for (const [keyword, value] of Object.entries(lightingKeywords)) {
+                if (lowerAnalysis.includes(keyword)) {
+                    document.getElementById('lighting').value = value;
+                    break;
+                }
+            }
+            
+            // Detect and set colors
+            const colorKeywords = {
+                'warm': 'warm tones',
+                'cool': 'cool tones',
+                'vibrant': 'vibrant',
+                'muted': 'muted',
+                'pastel': 'pastel',
+                'monochrome': 'monochrome',
+                'black and white': 'monochrome'
+            };
+            
+            for (const [keyword, value] of Object.entries(colorKeywords)) {
+                if (lowerAnalysis.includes(keyword)) {
+                    document.getElementById('colors').value = value;
+                    break;
+                }
+            }
+            
+            // Detect and set style
+            const styleKeywords = {
+                'realistic': 'hyper-realistic',
+                'surreal': 'surreal',
+                'minimal': 'minimalist',
+                'ethereal': 'ethereal',
+                'dream': 'dreamlike'
+            };
+            
+            for (const [keyword, value] of Object.entries(styleKeywords)) {
+                if (lowerAnalysis.includes(keyword)) {
+                    document.getElementById('style').value = value;
+                    break;
+                }
+            }
+            
+            // Auto-generate prompt based on the analysis
+            setTimeout(() => {
+                generate();
+            }, 500);
+        }
+        
+        // ========================================
+        // PRESET & EFFECT TOGGLES
+        // ========================================
+        
+        function togglePreset(preset, btn) {
+            if (activePresets.includes(preset)) {
+                activePresets = activePresets.filter(p => p !== preset);
+                btn.classList.remove('active');
+            } else {
+                activePresets.push(preset);
+                btn.classList.add('active');
+            }
+            generate();
+        }
+
+        function toggleFlare(flare, btn) {
+            if (activeFlares.includes(flare)) {
+                activeFlares = activeFlares.filter(f => f !== flare);
+                btn.classList.remove('active');
+            } else {
+                activeFlares.push(flare);
+                btn.classList.add('active');
+            }
+            generate();
+        }
+
+        function toggleNano(nano, btn) {
+            if (activeNano.includes(nano)) {
+                activeNano = activeNano.filter(n => n !== nano);
+                btn.classList.remove('active');
+            } else {
+                activeNano.push(nano);
+                btn.classList.add('active');
+            }
+            generate();
+        }
+        
+        // ========================================
+        // REVERSE ENGINEER FUNCTIONS
+        // ========================================
+        
+        function toggleOutcome(outcome, btn) {
+            // Only allow one outcome to be selected
+            document.querySelectorAll('.outcome-btn').forEach(b => b.classList.remove('active'));
+            selectedOutcome = outcome;
+            btn.classList.add('active');
+        }
+        
+        function toggleMood(mood, btn) {
+            if (selectedMoods.includes(mood)) {
+                selectedMoods = selectedMoods.filter(m => m !== mood);
+                btn.classList.remove('active');
+            } else {
+                selectedMoods.push(mood);
+                btn.classList.add('active');
+            }
+        }
+        
+        function togglePlatform(platform, btn) {
+            document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+            selectedPlatform = platform;
+            btn.classList.add('active');
+        }
+        
+        function reverseEngineer() {
+            const vision = document.getElementById('visionDescription').value;
+            
+            if (!selectedOutcome || selectedMoods.length === 0 || !vision) {
+                showToast('Incomplete', 'Please select an outcome, at least one mood, and describe your vision', 'error', 3000);
+                return;
+            }
+            
+            // Add Video Prompt Functions
+            let currentPromptType = 'image';
+            
+            // Function to switch between image and video prompts
+            function setPromptType(type) {
+                currentPromptType = type;
+                
+                // Update button states
+                document.querySelectorAll('.prompt-type-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.type === type) {
+                        btn.classList.add('active');
+                        // Update button styles for active state
+                        if (type === btn.dataset.type) {
+                            btn.style.background = 'linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(251, 191, 36, 0.15))';
+                            btn.style.borderColor = '#d4af37';
+                            btn.style.color = '#d4af37';
+                        }
+                    } else {
+                        // Reset inactive button styles
+                        btn.style.background = 'rgba(26, 26, 26, 0.6)';
+                        btn.style.borderColor = 'rgba(212, 175, 55, 0.2)';
+                        btn.style.color = '#a0a0a0';
+                    }
+                });
+                
+                // Show/hide video controls
+                const videoControls = document.getElementById('videoControls');
+                if (type === 'video') {
+                    videoControls.style.display = 'block';
+                } else {
+                    videoControls.style.display = 'none';
+                }
+                
+                // Update generate button text
+                const generateBtn = document.querySelector('.generate-btn');
+                if (generateBtn) {
+                    if (type === 'video') {
+                        generateBtn.innerHTML = '⚡ Generate Video Prompt';
+                        generateBtn.onclick = function() { generateVideoPrompt(); };
+                    } else {
+                        generateBtn.innerHTML = '⚡ Generate Image Prompts';
+                        generateBtn.onclick = function() { generate(); };
+                    }
+                }
+            }
+            
+            // Function to generate video prompt
+            function generateVideoPrompt() {
+                const intensity = parseInt(document.getElementById('intensity').value);
+                const style = document.querySelector('.preset-btn.active')?.textContent || 'Cinematic';
+                const motion = document.getElementById('motionDescription').value || 'camera slowly moves forward';
+                const cameraMovement = document.getElementById('cameraMovement').value || 'dolly';
+                const duration = document.getElementById('videoDuration').value || '5';
+                const pace = document.getElementById('videoPace').value || 'medium';
+                const mood = document.getElementById('videoMood').value || 'cinematic';
+                
+                // Build video prompt (Sora/Runway style)
+                let videoPrompt = `[${duration}s ${style.toLowerCase()} video] `;
+                
+                // Add main motion description
+                videoPrompt += `${motion}. `;
+                
+                // Add camera movement
+                if (cameraMovement) {
+                    videoPrompt += `Camera: ${cameraMovement} shot. `;
+                }
+                
+                // Add mood and pace
+                videoPrompt += `Mood: ${mood}, ${pace} paced. `;
+                
+                // Add intensity-based details
+                if (intensity >= 80) {
+                    videoPrompt += `Ultra-detailed, dramatic lighting, cinematic color grade, professional production value. `;
+                } else if (intensity >= 50) {
+                    videoPrompt += `High quality render, balanced lighting, smooth motion, professional look. `;
+                } else {
+                    videoPrompt += `Natural lighting, subtle movement, documentary style. `;
+                }
+                
+                // Add style-specific elements
+                videoPrompt += `Style: ${style} aesthetic`;
+                
+                // Display the prompt in Runway ML format output
+                const runwayOutput = document.getElementById('rw');
+                if (runwayOutput) {
+                    runwayOutput.textContent = videoPrompt;
+                }
+                
+                // Also show in MidJourney format area
+                const mjOutput = document.getElementById('mj');
+                if (mjOutput) {
+                    mjOutput.textContent = `VIDEO MODE: ${videoPrompt}`;
+                }
+                
+                // Show success message
+                showToast('Video Prompt Generated!', `AMP'd Meter: ${intensity}% | Duration: ${duration}s`, 'success', 3000);
+            }
+            
+            // Make functions globally available
+            window.setPromptType = setPromptType;
+            window.generateVideoPrompt = generateVideoPrompt;
+        
+        function reverseEngineer() {
+            const vision = document.getElementById('visionDescription').value;
+            
+            if (!selectedOutcome || selectedMoods.length === 0 || !vision) {
+                showToast('Incomplete', 'Please select an outcome, at least one mood, and describe your vision', 'error', 3000);
+                return;
+            }
+            
+            // Show a loading message
+            showToast('Configuring...', 'Claude is analyzing your vision and configuring settings...', 'info', 2000);
+            
+            // This is a simplified version - in a real implementation, you would call an AI API
+            // For now, we'll just auto-configure some basic settings based on selections
+            
+            setTimeout(() => {
+                // Switch to Quick Builder tab
+                switchTab(0);
+                
+                // Auto-configure settings based on outcome and moods
+                const subjectField = document.getElementById('subject');
+                subjectField.value = vision.substring(0, 100);
+                
+                // Set mood-based lighting
+                if (selectedMoods.includes('dark')) {
+                    document.getElementById('lighting').value = 'dramatic lighting';
+                } else if (selectedMoods.includes('serene') || selectedMoods.includes('peaceful')) {
+                    document.getElementById('lighting').value = 'soft lighting';
+                } else {
+                    document.getElementById('lighting').value = 'cinematic lighting';
+                }
+                
+                // Set outcome-based style
+                if (selectedOutcome === 'portrait' || selectedOutcome === 'character') {
+                    document.getElementById('cameraAngle').value = 'eye level';
+                    document.getElementById('style').value = 'hyper-realistic';
+                } else if (selectedOutcome === 'fantasy' || selectedOutcome === 'scifi') {
+                    document.getElementById('style').value = 'surreal';
+                } else if (selectedOutcome === 'abstract') {
+                    document.getElementById('style').value = 'minimalist';
+                }
+                
+                // Auto-generate
+                generate();
+                
+                showToast('Success!', '✨ Settings configured based on your vision! Review and adjust as needed.', 'success', 4000);
+            }, 1500);
+        }
+        
+        // ========================================
+        // INTENSITY SLIDER
+        // ========================================
+        
+        function updateIntensity(value) {
+            document.getElementById('intensityValue').textContent = value + '%';
+            generate();
+        }
+        
+        // ========================================
+        // PROMPT GENERATION
+        // ========================================
+        
+        function generate() {
+            const intensity = parseInt(document.getElementById('intensity').value);
+            const style = document.querySelector('.preset-btn.active')?.textContent || 'Cinematic';
+            
+            // Check if we're in image or video mode
+            if (currentPromptType === 'video') {
+                generateVideoPrompt();
+                return;
+            }
+            
+            // If no profile from upload, create basic one
+            if (!currentProfile) {
+                currentProfile = {
+                    style: { artistic: style.toLowerCase(), mood: "cinematic" },
+                    lighting: { type: "natural", temperature: "neutral" },
+                    color: { palette: ["#000000"], mood: "neutral" },
+                    composition: { type: "centered" },
+                    atmosphere: { energy: intensity / 10 }
+                };
+            }
+            
+            // Gather user selections
+            const userSelections = {
+                preset: style,
+                ampd_meter: intensity,
+                aspect_ratio: document.getElementById('aspectRatio')?.value || '16:9',
+                lighting: document.getElementById('lightingType')?.value || 'natural',
+                camera_angle: document.getElementById('cameraAngle')?.value || 'eye level',
+                mode: 'image'
+            };
+            
+            // Show loading
+            showToast('Generating...', 'Claude is crafting your prompts', 'info', 3000);
+            
+            // Call Claude API for prompt generation
+            fetch('/api/prompt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    profile: currentProfile,
+                    userSelections: userSelections,
+                    output: 'image_prompt'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.prompts) {
+                    // Display prompts in different formats
+                    if (data.prompts.midjourney) {
+                        document.getElementById('mj').textContent = data.prompts.midjourney;
+                    }
+                    if (data.prompts.runway) {
+                        document.getElementById('rw').textContent = data.prompts.runway;
+                    }
+                    if (data.prompts.sdxl) {
+                        document.getElementById('sdxl').textContent = data.prompts.sdxl;
+                    }
+                    if (data.prompts.flux) {
+                        document.getElementById('flux').textContent = data.prompts.flux;
+                    }
+                    
+                    showToast('Prompts Generated!', `AMP'd Meter: ${intensity}% applied`, 'success', 3000);
+                } else {
+                    // Fallback to local generation if API fails
+                    generateLocalPrompts(intensity, style);
+                }
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+                // Fallback to local generation
+                generateLocalPrompts(intensity, style);
+            });
+        }
+        
+        // Fallback local generation (original function)
+        function generateLocalPrompts(intensity, style) {
+            const subj = document.getElementById('subject').value.trim();
+            const elem = document.getElementById('elements').value.trim();
+            const sett = document.getElementById('setting').value.trim();
+            const ligh = document.getElementById('lighting').value;
+            const cols = document.getElementById('colors').value;
+            const styl = document.getElementById('style').value;
+            const cameraAngle = document.getElementById('cameraAngle').value;
+            const cameraType = document.getElementById('cameraType').value;
+            const nanoScale = document.getElementById('nanoScale').value;
+            const skinTone = document.getElementById('skinTone').value;
+            const ethnicity = "";
+            const gender = "";
+            const hairColor = "";
+            const intensity = parseInt(document.getElementById('intensity').value);
+            
+            const parts = [];
+            
+            if (subj) {
+                let subjectPart = subj;
+                const descriptors = [];
+                
+                
+                
+                if (skinTone) {
+                    descriptors.push(skinTone);
+                }
+                
+                
+                if (descriptors.length > 0) {
+                    subjectPart = descriptors.join(' ') + ' ' + subjectPart;
+                }
+                
+                parts.push(subjectPart);
+            }
+            
+            if (elem) parts.push(elem);
+            if (sett) parts.push(sett);
+            
+            if (cameraAngle) parts.push(cameraAngle);
+            if (cameraType) parts.push('shot with ' + cameraType);
+            
+            if (nanoScale) parts.push(nanoScale);
+            
+            if (ligh) parts.push(ligh);
+            if (cols) parts.push(cols + ' colors');
+            if (styl) parts.push(styl);
+            
+            activePresets.forEach(preset => {
+                const style = stylePresets[preset];
+                const numKeywords = Math.ceil((style.keywords.length * intensity) / 100);
+                parts.push(...style.keywords.slice(0, numKeywords));
+            });
+            
+            activeFlares.forEach(flare => {
+                parts.push(flareEffects[flare]);
+            });
+            
+            activeNano.forEach(nano => {
+                parts.push(nanoEffects[nano]);
+            });
+            
+            parts.push('highly detailed', 'cinematic', 'professional');
+            
+            const master = parts.filter(p => p).join(', ');
+            const ratio = document.getElementById('ratio').value;
+            
+            const negatives = ['low quality', 'blurry', 'distorted', 'watermark', 'amateur'];
+            if (activePresets.includes('pixel')) negatives.push('photorealistic');
+            const negative = negatives.join(', ');
+            
+            document.getElementById('master').textContent = master;
+            document.getElementById('negative').textContent = negative;
+            
+            // Midjourney format with stylize parameter based on intensity
+            const mjStylize = Math.round((intensity / 100) * 1000); // 0-1000 range for --s
+            document.getElementById('mj').textContent = `${master} --ar ${ratio} --s ${mjStylize} --q 2`;
+            
+            document.getElementById('rw').textContent = `Prompt: ${master}\n\nNegative: ${negative}`;
+            document.getElementById('sdxl').textContent = `Prompt: ${master}\n\nNegative: ${negative}\nCFG: 7.5`;
+            document.getElementById('flux').textContent = `${master}\n\nRatio: ${ratio}\nGuidance: 3.5`;
+            
+            // Save to history and show notification
+            saveToHistory(master);
+            showToast('Prompts Generated!', `Style Intensity: ${intensity}% applied to all formats`, 'success', 3000);
+        }
+
+        function copy(id, btn) {
+            const text = document.getElementById(id).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '✓ Copied';
+                btn.classList.add('copied');
+                showToast('Copied!', 'Prompt copied to clipboard', 'success', 2000);
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                showToast('Error', 'Failed to copy to clipboard', 'error', 3000);
+            });
+        }
+
+        // ========================================
+        // PREMIUM FEATURES
+        // ========================================
+        
+        // Set this to true to enable premium features, false to show upgrade prompts
+        let hasPremium = true; // Change to false to test premium lock
+        
+        function initPremiumFeatures() {
+            if (!hasPremium) {
+                lockPremiumFeatures();
+                lockReverseEngineerTab();
+            }
+        }
+        
+        function lockPremiumFeatures() {
+            const skinToneGroup = document.getElementById('skinToneGroup');
+            const skinToneSelect = document.getElementById('skinTone');
+            
+            // Disable the select
+            skinToneSelect.disabled = true;
+            skinToneSelect.style.opacity = '0.5';
+            
+            // Create and add lock overlay
+            const lockOverlay = document.createElement('div');
+            lockOverlay.className = 'premium-lock-overlay';
+            lockOverlay.innerHTML = `
+                <div class="premium-lock-content">
+                    <div class="premium-lock-icon">🔒</div>
+                    <div class="premium-lock-text">Click to Upgrade</div>
+                </div>
+            `;
+            
+            lockOverlay.addEventListener('click', showUpgradeModal);
+            skinToneGroup.style.position = 'relative';
+            skinToneGroup.appendChild(lockOverlay);
+        }
+        
+        function lockReverseEngineerTab() {
+            const tab = document.querySelector('.premium-tab');
+            const tabContent = document.getElementById('reverseEngineerContent');
+            
+            // Add locked class to tab button
+            tab.classList.add('locked');
+            
+            // Add locked class to content wrapper
+            tabContent.classList.add('locked');
+            
+            // Create lock overlay for tab
+            const lockOverlay = document.createElement('div');
+            lockOverlay.className = 'premium-tab-lock';
+            lockOverlay.innerHTML = `
+                <div class="premium-tab-lock-icon">💎</div>
+                <div class="premium-tab-lock-title">Premium Feature</div>
+                <div class="premium-tab-lock-description">
+                    Unlock the Reverse Engineer feature to automatically configure perfect settings based on your desired outcome, mood, and platform.
+                </div>
+                <div class="premium-tab-lock-button">Upgrade to Premium</div>
+            `;
+            
+            lockOverlay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showUpgradeModal();
+            });
+            
+            const reverseTab = document.getElementById('reverseEngineerTab');
+            reverseTab.style.position = 'relative';
+            reverseTab.appendChild(lockOverlay);
+        }
+        
+        function handlePremiumTab(tabIndex) {
+            if (!hasPremium && tabIndex === 1) {
+                // Show upgrade modal instead of switching tabs
+                showUpgradeModal();
+                return;
+            }
+            // If premium or not a premium tab, switch normally
+            switchTab(tabIndex);
+        }
+        
+        function showUpgradeModal() {
+            showToast(
+                '💎 Premium Feature', 
+                'Upgrade to unlock Reverse Engineer + Skin Tone Chart with 30+ professional options!', 
+                'info', 
+                5000
+            );
+            
+            // Optional: Add more sophisticated upgrade flow here
+            // For example, redirect to pricing page or show a modal
+            console.log('Upgrade clicked - redirect to pricing page');
+        }
+        
+        function unlockPremium() {
+            hasPremium = true;
+            
+            // Unlock skin tone feature
+            const skinToneSelect = document.getElementById('skinTone');
+            const skinToneLockOverlay = document.querySelector('#skinToneGroup .premium-lock-overlay');
+            
+            if (skinToneLockOverlay) {
+                skinToneLockOverlay.remove();
+            }
+            
+            skinToneSelect.disabled = false;
+            skinToneSelect.style.opacity = '1';
+            
+            // Unlock reverse engineer tab
+            const premiumTab = document.querySelector('.premium-tab');
+            const tabContent = document.getElementById('reverseEngineerContent');
+            const tabLockOverlay = document.querySelector('.premium-tab-lock');
+            
+            if (premiumTab) {
+                premiumTab.classList.remove('locked');
+            }
+            
+            if (tabContent) {
+                tabContent.classList.remove('locked');
+            }
+            
+            if (tabLockOverlay) {
+                tabLockOverlay.remove();
+            }
+            
+            showToast('Premium Activated!', 'You now have access to all premium features: Reverse Engineer + Skin Tone Chart', 'success', 4000);
+        }
+        
+        // ========================================
+        // TOAST NOTIFICATIONS
+        // ========================================
+        
+        function showToast(title, message, type = 'info', duration = 3000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.4s ease-out reverse';
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
+        
+        // ========================================
+        // HISTORY MANAGEMENT
+        // ========================================
+        
+        function saveToHistory(prompt) {
+            if (!prompt || prompt === 'Your generated prompt will appear here...') return;
+            
+            const historyItem = {
+                prompt: prompt,
+                timestamp: new Date().toLocaleString(),
+                id: Date.now()
+            };
+            
+            promptHistory.unshift(historyItem);
+            if (promptHistory.length > 20) promptHistory.pop();
+            
+            updateHistoryDisplay();
+        }
+        
+        function updateHistoryDisplay() {
+            const historyList = document.getElementById('historyList');
+            
+            if (promptHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-history">
+                        No prompts generated yet. Start creating to see your history here!
+                    </div>
+                `;
+                return;
+            }
+            
+            historyList.innerHTML = promptHistory.map(item => `
+                <div class="history-item" onclick="loadFromHistory('${item.id}')">
+                    <div class="history-item-text">${item.prompt}</div>
+                    <div class="history-item-time">${item.timestamp}</div>
+                </div>
+            `).join('');
+        }
+        
+        function loadFromHistory(id) {
+            const item = promptHistory.find(h => h.id === parseInt(id));
+            if (!item) return;
+            
+            // Switch to Quick Builder tab
+            switchTab(0);
+            
+            // Set the master prompt
+            document.getElementById('master').textContent = item.prompt;
+            
+            showToast('Loaded from History', 'Prompt loaded! You can now modify and regenerate.', 'success', 3000);
+        }
+        
+        // ========================================
+        // TAB SWITCHING
+        // ========================================
+        
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach((tab, i) => {
+                if (i === index) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            contents.forEach((content, i) => {
+                if (i === index) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+        
+        // Initialize premium features on page load
+        document.addEventListener('DOMContentLoaded', initPremiumFeatures);
+    </script>
+</body>
+</html>
