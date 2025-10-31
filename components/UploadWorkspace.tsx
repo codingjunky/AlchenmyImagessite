@@ -17,7 +17,9 @@ export default function UploadWorkspace() {
   const [aspectRatio, setAspectRatio] = useState<string>("16:9");
   const [cameraAngle, setCameraAngle] = useState<string>("eye");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisComplete, setAnalysisComplete] = useState(false);
   const [error, setError] = useState<string>("");
+  const [profileData, setProfileData] = useState<any>(null);
 
   // Identity controls
   const [identity, setIdentity] = useState<{
@@ -45,7 +47,8 @@ export default function UploadWorkspace() {
     { id: "urban_street_art", name: "Urban Street Art" }
   ];
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // ✅ FIXED: Auto-analyze on file selection
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -64,57 +67,164 @@ export default function UploadWorkspace() {
     setSelectedFile(file);
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+    
+    // ✅ NEW: Pass image to output console
+    if (typeof window !== 'undefined' && window.AMPD_OUTPUT?.setImages) {
+      window.AMPD_OUTPUT.setImages({ before: url });
+    }
+    
+    // ✅ NEW: Auto-trigger analysis
+    await handleAnalyze(file);
   };
 
- const handleAnalyze = async () => {
-  if (!selectedFile) return;
-  setIsAnalyzing(true);
-  setError("");
+  // ✅ FIXED: Added progress bar integration
+  const handleAnalyze = async (fileToAnalyze?: File) => {
+    const file = fileToAnalyze || selectedFile;
+    if (!file) return;
 
-  try {
-    const formData = new FormData();
-    formData.append("file", selectedFile);
+    setIsAnalyzing(true);
+    setAnalysisComplete(false);
+    setError("");
 
-    const response = await fetch("/api/analyze", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      // ✅ Progress: Start
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(10, 'Uploading image...');
+      }
 
-    if (!response.ok) {
-      throw new Error("Analysis failed");
-    }
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const data = await response.json();
-    
-    // Update identity fields with detected values
-    if (data.profile?.subjects?.[0]) {
-      const subject = data.profile.subjects[0];
-      setIdentity({
-        ethnicity: { 
-          value: subject.ethnicity || "Other", 
-          source: "vision", 
-          user_override: false 
-        },
-        hair_color: { 
-          value: subject.hair_color || "brown", 
-          source: "vision", 
-          user_override: false 
-        },
-        eye_color: { 
-          value: subject.eye_color || "brown", 
-          source: "vision", 
-          user_override: false 
-        }
+      // ✅ Progress: Uploading
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(30, 'Analyzing visual DNA...');
+      }
+
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        body: formData,
       });
+
+      if (!response.ok) {
+        throw new Error("Analysis failed");
+      }
+
+      // ✅ Progress: Processing
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(70, 'Extracting identity traits...');
+      }
+
+      const data = await response.json();
+      setProfileData(data.profile);
+      
+      // Update identity fields with detected values
+      if (data.profile?.subjects?.[0]) {
+        const subject = data.profile.subjects[0];
+        setIdentity({
+          ethnicity: { 
+            value: subject.ethnicity || "Other", 
+            source: "vision", 
+            user_override: false 
+          },
+          hair_color: { 
+            value: subject.hair_color || "brown", 
+            source: "vision", 
+            user_override: false 
+          },
+          eye_color: { 
+            value: subject.eye_color || "brown", 
+            source: "vision", 
+            user_override: false 
+          }
+        });
+      }
+
+      // ✅ Progress: Complete
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(100, 'Analysis complete ✓');
+      }
+
+      setAnalysisComplete(true);
+
+    } catch (err) {
+      console.error("Analysis error:", err);
+      setError("Analysis failed. Please try again.");
+      
+      // ✅ Progress: Error
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(0, 'Analysis failed');
+      }
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  // ✅ NEW: Separate function for prompt generation
+  const handleGeneratePrompt = async () => {
+    if (!profileData || !analysisComplete) {
+      setError("Please upload and analyze an image first");
+      return;
     }
 
-    alert("Analysis complete! Identity traits detected.");
-  } catch (err) {
-    setError("Analysis failed. Please try again.");
-  } finally {
-    setIsAnalyzing(false);
-  }
-};
+    try {
+      // ✅ Progress: Generating prompt
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(50, 'Generating prompt...');
+      }
+
+      const response = await fetch("/api/prompt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          visualDNA: {
+            subject: profileData.subjects?.[0]?.type || "person",
+            lighting: lighting,
+            colors: profileData.color_palette || [],
+            camera: {
+              lens: profileData.camera?.lens || "50mm",
+              angle: cameraAngle
+            },
+            mood: profileData.notes || ""
+          },
+          selections: {
+            style: selectedPreset,
+            aspectRatio: aspectRatio,
+            intensity: ampdMeter * 10, // Convert 1-10 to 0-100
+            gender: profileData.subjects?.[0]?.gender,
+            ethnicity: identity.ethnicity.value,
+            hair: identity.hair_color.value,
+            eyes: identity.eye_color.value
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Prompt generation failed");
+      }
+
+      const promptText = await response.text();
+      
+      // ✅ Display prompt in output console
+      if (typeof window !== 'undefined' && window.AMPD_OUTPUT?.setPrompt) {
+        window.AMPD_OUTPUT.setPrompt(promptText);
+      }
+
+      // ✅ Progress: Complete
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(100, 'Prompt generated ✓');
+      }
+
+    } catch (err) {
+      console.error("Prompt generation error:", err);
+      setError("Prompt generation failed. Please try again.");
+      
+      if (typeof window !== 'undefined' && window.AMPD_UI?.analyzer?.setProgress) {
+        window.AMPD_UI.analyzer.setProgress(0, 'Prompt generation failed');
+      }
+    }
+  };
 
   const updateIdentity = (field: keyof typeof identity, value: string) => {
     setIdentity(prev => ({
@@ -152,8 +262,9 @@ export default function UploadWorkspace() {
                   onChange={handleFileChange}
                   className="hidden"
                   id="file-upload"
+                  disabled={isAnalyzing}
                 />
-                <label htmlFor="file-upload" className="cursor-pointer">
+                <label htmlFor="file-upload" className={isAnalyzing ? "cursor-wait" : "cursor-pointer"}>
                   {previewUrl ? (
                     <div className="relative w-full aspect-square max-w-sm mx-auto">
                       <Image
@@ -162,6 +273,11 @@ export default function UploadWorkspace() {
                         fill
                         className="object-contain rounded-lg"
                       />
+                      {isAnalyzing && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-lg">
+                          <div className="text-gold text-sm font-semibold">Analyzing...</div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="py-12">
@@ -175,6 +291,12 @@ export default function UploadWorkspace() {
 
               {error && (
                 <p className="mt-4 text-red-400 text-sm text-center">{error}</p>
+              )}
+
+              {analysisComplete && (
+                <p className="mt-4 text-gold text-sm text-center font-semibold">
+                  ✓ Analysis complete! Identity traits detected.
+                </p>
               )}
 
               <p className="mt-4 text-xs text-muted text-center">
@@ -193,7 +315,7 @@ export default function UploadWorkspace() {
                 These traits anchor your subject. Change them to override detection.
               </p>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {/* Ethnicity */}
                 <div className="flex items-center justify-between gap-3">
                   <label className="text-sm text-paper font-medium">Ethnicity</label>
@@ -378,16 +500,16 @@ export default function UploadWorkspace() {
               </div>
             </div>
 
-            {/* Generate Button */}
+            {/* ✅ FIXED: Generate Prompt Button - Only enabled after analysis */}
             <button
-              onClick={handleAnalyze}
-              disabled={!selectedFile || isAnalyzing}
+              onClick={handleGeneratePrompt}
+              disabled={!analysisComplete}
               className="w-full py-4 px-8 rounded-xl font-semibold text-lg
                 bg-gold text-ink hover:bg-gold-2 
                 disabled:bg-gold/30 disabled:cursor-not-allowed
                 transition-all duration-300 hover:shadow-[0_0_30px_rgba(214,178,94,0.5)]"
             >
-              {isAnalyzing ? "Analyzing..." : "Generate Image Prompt"}
+              {analysisComplete ? "Generate Prompt" : "Upload image to begin"}
             </button>
           </div>
         </div>
