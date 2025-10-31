@@ -2162,17 +2162,14 @@
                         const base64Data = reader.result.split(',')[1];
                         const mediaType = currentImage.type;
                         
-                        // Call Netlify function
-                        const response = await fetch('/.netlify/functions/analyze-image', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                image: base64Data,
-                                mediaType: mediaType
-                            })
-                        });
+                        // Call Netlify function - send as form data
+const formData = new FormData();
+formData.append('file', currentImage);
+
+const response = await fetch('/.netlify/functions/analyze', {
+    method: 'POST',
+    body: formData
+});
                         
                         if (!response.ok) {
                             throw new Error('Analysis failed');
