@@ -15,29 +15,22 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: `File size must be ${process.env.ALLOWED_IMAGE_MAX_MB || 10}MB or less` },
         { status: 400 }
       );
     }
-    // Validate file type
     if (!file.type.startsWith("image/")) {
       return NextResponse.json(
         { error: "File must be an image" },
         { status: 400 }
       );
     }
-    // Convert file to base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const base64Image = buffer.toString("base64");
-    
-    // Strip any data URL prefix if present
     const cleanBase64 = base64Image.replace(/^data:image\/\w+;base64,/, "");
-    
-    // Prepare the analysis prompt
     const analysisPrompt = `Analyze this image and extract detailed information about the subject(s) and scene. Return ONLY valid JSON with this exact structure:
 {
   "subjects": [{
@@ -59,7 +52,6 @@ export async function POST(request: NextRequest) {
 }
 CRITICAL: ethnicity, hair_color, and eye_color are LOCKED identity attributes that must never be changed.
 Be specific and accurate. Return only the JSON, no additional text.`;
-    // Call Claude Vision API - USE THE ACTUAL FILE TYPE
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
       max_tokens: 2000,
@@ -83,13 +75,9 @@ Be specific and accurate. Return only the JSON, no additional text.`;
         },
       ],
     });
-    // Extract the JSON response
     const responseText = message.content[0].type === "text" ? message.content[0].text : "";
-    
-    // Parse JSON from response
     let profile;
     try {
-      // Try to extract JSON if it's wrapped in markdown code blocks
       const jsonMatch = responseText.match(/```json\n?([\s\S]*?)\n?```/) || responseText.match(/\{[\s\S]*\}/);
       const jsonText = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : responseText;
       profile = JSON.parse(jsonText);
@@ -97,4 +85,18 @@ Be specific and accurate. Return only the JSON, no additional text.`;
       console.error("Failed to parse Claude response:", responseText);
       return NextResponse.json(
         { error: "Failed to parse analysis results" },
-        { stat
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({
+      profile,
+      message: "Image analyzed successfully",
+    });
+  } catch (error) {
+    console.error("Analysis error:", error);
+    return NextResponse.json(
+      { error: "Failed to analyze image" },
+      { status: 500 }
+    );
+  }
+}
