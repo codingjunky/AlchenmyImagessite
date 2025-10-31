@@ -116,7 +116,7 @@ export default function LandingPage() {
             {/* Primary CTA */}
             <div>
               <Link 
-                href="/studio" 
+                href="/studio.html" 
                 className="inline-flex items-center gap-3 px-12 py-5 bg-gradient-to-r from-[#D6B25E] to-[#F0D58B] text-[#0B0B0C] font-bold text-lg rounded-full hover:shadow-xl hover:shadow-[#D6B25E]/30 transform hover:scale-105 transition-all duration-300"
               >
                 Enter Beta Experience
@@ -263,7 +263,7 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold mb-6 text-[#F5F3EF]">Ready to Transform Your Visuals?</h2>
             <p className="text-lg text-[#9CA3AF] mb-8">Join the beta and experience visual alchemy</p>
             <Link 
-              href="/studio" 
+              href="/studio.html" 
               className="inline-flex items-center gap-3 px-12 py-5 bg-gradient-to-r from-[#D6B25E] to-[#F0D58B] text-[#0B0B0C] font-bold text-lg rounded-full hover:shadow-xl hover:shadow-[#D6B25E]/30 transform hover:scale-105 transition-all duration-300"
             >
               Enter Beta Experience
