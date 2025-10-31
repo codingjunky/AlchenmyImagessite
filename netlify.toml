@@ -1,0 +1,17 @@
+# Netlify Configuration for AMP'd Images
+# Fixes Next.js 14 compatibility with Netlify
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# Disable form detection (not needed for this app)
+[forms]
+  enabled = false
