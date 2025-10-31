@@ -1,7 +1,7 @@
 # Netlify Configuration for AMP'd Images
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "20"

@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Static export for landing pages
+  output: 'export',
   // Image optimization disabled for static export
   images: {
     unoptimized: true,
