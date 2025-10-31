@@ -16,6 +16,7 @@ export default function Home() {
       <HowItWorks />
       <FeatureGrid />
       <UploadWorkspace />
+      <AmpdUIKit />
       <VideoPromptPanel />
       <ComingSoon />
       <Footer />
