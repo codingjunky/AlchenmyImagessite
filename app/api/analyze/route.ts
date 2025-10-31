@@ -1,25 +1,20 @@
 // Force rebuild: 2025-10-30 16:21:25
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
-
 const MAX_FILE_SIZE = parseInt(process.env.ALLOWED_IMAGE_MAX_MB || "10") * 1024 * 1024;
-
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
-
     if (!file) {
       return NextResponse.json(
         { error: "No file provided" },
         { status: 400 }
       );
     }
-
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
@@ -27,7 +22,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Validate file type
     if (!file.type.startsWith("image/")) {
       return NextResponse.json(
@@ -35,18 +29,18 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Convert file to base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const base64Image = buffer.toString("base64");
-
+    
+    // Strip any data URL prefix if present - THIS IS THE CRITICAL FIX
+    const cleanBase64 = base64Image.replace(/^data:image\/\w+;base64,/, "");
+    
     // Always use JPEG media type for maximum compatibility with Anthropic API
     const mediaType: "image/jpeg" = "image/jpeg";
-
     // Prepare the analysis prompt
     const analysisPrompt = `Analyze this image and extract detailed information about the subject(s) and scene. Return ONLY valid JSON with this exact structure:
-
 {
   "subjects": [{
     "type": "person|animal|object",
@@ -65,10 +59,8 @@ export async function POST(request: NextRequest) {
   "ampd_meter": 5,
   "notes": "salient objects, mood words, textures"
 }
-
 CRITICAL: ethnicity, hair_color, and eye_color are LOCKED identity attributes that must never be changed.
 Be specific and accurate. Return only the JSON, no additional text.`;
-
     // Call Claude Vision API
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
@@ -82,7 +74,7 @@ Be specific and accurate. Return only the JSON, no additional text.`;
               source: {
                 type: "base64",
                 media_type: "image/jpeg",
-                data: base64Image,
+                data: cleanBase64,
               },
             },
             {
@@ -93,7 +85,6 @@ Be specific and accurate. Return only the JSON, no additional text.`;
         },
       ],
     });
-
     // Extract the JSON response
     const responseText = message.content[0].type === "text" ? message.content[0].text : "";
     
@@ -111,13 +102,11 @@ Be specific and accurate. Return only the JSON, no additional text.`;
         { status: 500 }
       );
     }
-
     // Return the profile (in production, you'd also store to Netlify Blobs here)
     return NextResponse.json({
       profile,
       message: "Image analyzed successfully",
     });
-
   } catch (error) {
     console.error("Analysis error:", error);
     return NextResponse.json(
