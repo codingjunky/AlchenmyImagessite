@@ -1,6 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 
+// Declare global window properties for TypeScript
+declare global {
+  interface Window {
+    AMPD_UI?: {
+      analyzer?: {
+        setProgress?: (prog: number, msg: string) => void;
+        status?: (msg: string) => void;
+      };
+    };
+    AMPD_OUTPUT?: {
+      setPrompt?: (text: string) => void;
+      setImages?: (imgs: { before?: string; after?: string }) => void;
+    };
+  }
+}
+
 export function AmpdUIKit() {
   const [meterValue, setMeterValue] = useState(42);
   const [promptText, setPromptText] = useState("");
