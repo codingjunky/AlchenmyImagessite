@@ -1,9 +1,9 @@
 # Netlify Configuration for AMP'd Images
 # Simple config - let Netlify auto-detect Next.js
-
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
 [build.environment]
+  NODE_VERSION = "20"
   NODE_VERSION = "20"
