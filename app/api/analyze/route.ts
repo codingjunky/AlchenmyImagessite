@@ -34,11 +34,9 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
     const base64Image = buffer.toString("base64");
     
-    // Strip any data URL prefix if present - THIS IS THE CRITICAL FIX
+    // Strip any data URL prefix if present
     const cleanBase64 = base64Image.replace(/^data:image\/\w+;base64,/, "");
     
-    // Always use JPEG media type for maximum compatibility with Anthropic API
-    const mediaType: "image/jpeg" = "image/jpeg";
     // Prepare the analysis prompt
     const analysisPrompt = `Analyze this image and extract detailed information about the subject(s) and scene. Return ONLY valid JSON with this exact structure:
 {
@@ -61,7 +59,7 @@ export async function POST(request: NextRequest) {
 }
 CRITICAL: ethnicity, hair_color, and eye_color are LOCKED identity attributes that must never be changed.
 Be specific and accurate. Return only the JSON, no additional text.`;
-    // Call Claude Vision API
+    // Call Claude Vision API - USE THE ACTUAL FILE TYPE
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
       max_tokens: 2000,
@@ -73,7 +71,7 @@ Be specific and accurate. Return only the JSON, no additional text.`;
               type: "image",
               source: {
                 type: "base64",
-                media_type: "image/jpeg",
+                media_type: file.type as "image/jpeg" | "image/png" | "image/gif" | "image/webp",
                 data: cleanBase64,
               },
             },
@@ -99,19 +97,4 @@ Be specific and accurate. Return only the JSON, no additional text.`;
       console.error("Failed to parse Claude response:", responseText);
       return NextResponse.json(
         { error: "Failed to parse analysis results" },
-        { status: 500 }
-      );
-    }
-    // Return the profile (in production, you'd also store to Netlify Blobs here)
-    return NextResponse.json({
-      profile,
-      message: "Image analyzed successfully",
-    });
-  } catch (error) {
-    console.error("Analysis error:", error);
-    return NextResponse.json(
-      { error: "Failed to analyze image" },
-      { status: 500 }
-    );
-  }
-}
+        { stat
