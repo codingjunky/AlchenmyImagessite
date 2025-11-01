@@ -908,7 +908,7 @@
                     <div class="brand-tagline">AI PROMPT BUILDER</div>
                 </div>
             </div>
-            <div class="version-badge">BETA - Fixed</div>
+            <div class="version-badge">BETA v3.1</div>
         </div>
         
         <div class="tabs">
@@ -1257,9 +1257,12 @@
                 const result = await response.json();
                 hideLoadingOverlay();
                 
+                // Store the profile globally
+                currentProfile = result.profile;
+                
                 setTimeout(() => {
-                    applyAnalysisToPrompt(result.analysis || 'Image analyzed successfully');
-                    showToast('Success!', 'Image analyzed and settings applied', 'success', 3000);
+                    applyProfileToUI(result.profile);
+                    showToast('Success', 'Image analyzed and fields populated', 'success', 3000);
                 }, 500);
             } catch (error) {
                 console.error('Error:', error);
@@ -1268,25 +1271,104 @@
             }
         }
         
-        function applyAnalysisToPrompt(analysis) {
-            showToast('Analysis Complete', 'Claude analyzed your image!', 'success', 3000);
+        function applyProfileToUI(profile) {
+            if (!profile) {
+                console.error('No profile data received');
+                return;
+            }
             
-            const lowerAnalysis = analysis.toLowerCase();
+            console.log('Applying profile to UI:', profile);
             
-            const lightingKeywords = {
-                'natural light': 'natural light',
-                'dramatic': 'dramatic lighting',
-                'soft': 'soft lighting',
-                'cinematic': 'cinematic lighting'
-            };
-            
-            for (const [keyword, value] of Object.entries(lightingKeywords)) {
-                if (lowerAnalysis.includes(keyword)) {
-                    document.getElementById('lighting').value = value;
-                    break;
+            // Apply detected values to form controls
+            if (profile.lighting) {
+                const lightingSelect = document.getElementById('lighting');
+                const lightingType = profile.lighting.type || '';
+                
+                // Map Claude's lighting types to our dropdown values
+                const lightingMap = {
+                    'natural': 'natural light',
+                    'cinematic': 'cinematic lighting',
+                    'dramatic': 'dramatic lighting', 
+                    'soft': 'soft lighting',
+                    'hard': 'dramatic lighting',
+                    'neon': 'dramatic lighting',
+                    'studio': 'soft lighting'
+                };
+                
+                if (lightingMap[lightingType]) {
+                    lightingSelect.value = lightingMap[lightingType];
                 }
             }
             
+            // Set aspect ratio if detected
+            if (profile.aspect_ratio) {
+                document.getElementById('ratio').value = profile.aspect_ratio;
+            }
+            
+            // Set camera angle if detected
+            if (profile.camera && profile.camera.angle) {
+                const angleSelect = document.getElementById('cameraAngle');
+                const angleMap = {
+                    'eye': 'eye level',
+                    'low': 'low angle',
+                    'high': 'high angle',
+                    'top': 'high angle'
+                };
+                
+                if (angleMap[profile.camera.angle]) {
+                    angleSelect.value = angleMap[profile.camera.angle];
+                }
+            }
+            
+            // Apply color scheme based on temperature
+            if (profile.lighting && profile.lighting.temperature) {
+                const colorSelect = document.getElementById('colors');
+                if (profile.lighting.temperature === 'warm') {
+                    colorSelect.value = 'warm tones';
+                } else if (profile.lighting.temperature === 'cool') {
+                    colorSelect.value = 'cool tones';
+                }
+            }
+            
+            // Build subject description from detected data
+            if (profile.subjects && profile.subjects.length > 0) {
+                const subject = profile.subjects[0];
+                let subjectDesc = '';
+                
+                if (subject.type === 'person') {
+                    const parts = [];
+                    if (subject.age_range) parts.push(subject.age_range);
+                    if (subject.gender && subject.gender !== 'unspecified') parts.push(subject.gender);
+                    if (subject.ethnicity) parts.push(subject.ethnicity);
+                    
+                    subjectDesc = `${parts.join(' ')} person`;
+                    
+                    // Add identity details
+                    const details = [];
+                    if (subject.hair_color) details.push(`${subject.hair_color} hair`);
+                    if (subject.eye_color) details.push(`${subject.eye_color} eyes`);
+                    
+                    if (details.length > 0) {
+                        subjectDesc += `, ${details.join(', ')}`;
+                    }
+                } else {
+                    subjectDesc = subject.type;
+                }
+                
+                document.getElementById('subject').value = subjectDesc;
+            }
+            
+            // Set environment/setting
+            if (profile.environment && profile.environment.notes) {
+                document.getElementById('setting').value = profile.environment.notes;
+            } else if (profile.environment && profile.environment.type) {
+                document.getElementById('setting').value = profile.environment.type;
+            }
+            
+            // Simple success message - no identity trait mentions
+            showToast('Analysis Complete', 'Form fields populated with detected values', 'success', 3000);
+            
+            // Auto-generate the prompt with the detected data
             setTimeout(() => generate(), 500);
         }
         
@@ -1337,6 +1419,7 @@
             
             const parts = [];
             
+            // Build prompt from current form values only - user has complete freedom
             if (subj) parts.push(subj);
             if (sett) parts.push(sett);
             if (cameraAngle) parts.push(cameraAngle);
