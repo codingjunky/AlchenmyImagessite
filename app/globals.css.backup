@@ -41,31 +41,6 @@ body {
   outline-offset: 2px;
 }
 
-/* ===== LOGO ENHANCEMENT ANIMATIONS ===== */
-@keyframes goldPulse {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes goldGlow {
-  0%, 100% {
-    box-shadow: 0 0 40px rgba(214,178,94,0.6),
-                0 0 60px rgba(214,178,94,0.4),
-                0 0 80px rgba(214,178,94,0.2);
-  }
-  50% {
-    box-shadow: 0 0 50px rgba(214,178,94,0.8),
-                0 0 70px rgba(214,178,94,0.6),
-                0 0 100px rgba(214,178,94,0.3);
-  }
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -80,21 +55,17 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.4s ease-out;
 }
-
-/* Logo glow effect class */
-.logo-glow {
-  animation: goldGlow 3s ease-in-out infinite;
-}
-
 /* ===== AMP'd UI Kit Design Tokens ===== */
+/* Add these to your existing globals.css after the current :root variables */
+
 :root {
   --ampd-bg: #0b0b0f;
   --ampd-panel: #0f1117;
   --ampd-text: #e7e7ea;
   --ampd-muted: #9aa0a6;
-  --ampd-gold: #caa25e;
+  --ampd-gold: #caa25e;    /* primary gold - matches your existing */
   --ampd-gold-strong: #d9b56b;
-  --ampd-accent: #6bc2ff;
+  --ampd-accent: #6bc2ff;  /* subtle electric accent */
   --ampd-success: #3ddc97;
   --ampd-danger: #ff5d60;
   --ampd-radius: 16px;
